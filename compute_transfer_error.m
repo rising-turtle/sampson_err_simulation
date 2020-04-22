@@ -13,7 +13,7 @@ for i=1:size(obs,1)
     
 end
     
-fprintf('compute_transfer_error: num: %d mean: %f std: %f', size(obs,1), mean(err_array), std(err_array));
+fprintf('compute_transfer_error: num: %d mean: %f std: %f\r\n', size(obs,1), mean(err_array), std(err_array));
 
 mean_err = mean(err_array);
 std_err = std(err_array);

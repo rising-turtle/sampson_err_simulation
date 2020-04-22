@@ -13,7 +13,7 @@ for i=1:size(obs,1)
     
 end
     
-fprintf('compute_golden_error: num: %d mean: %f std: %f', size(obs,1), mean(err_array), std(err_array));
+fprintf('compute_golden_error: num: %d mean: %f std: %f\r\n', size(obs,1), mean(err_array), std(err_array));
 
 mean_err = mean(err_array);
 std_err = std(err_array);
@@ -58,8 +58,9 @@ function err = compute_golden_error_instance(obs, cam, R, t)
     lb = []; 
     ub = [];
     % options = optimset('Display', 'iter');
+    options = optimoptions('fmincon','Display','off');
     % [x, fval] = fmincon(@(x)obj_function(x,x0), x0, A, b, Aeq, beq, lb, ub, @(x)confuneq(x, d, R, t), options); 
-    [x, fval] = fmincon(@(x)obj_function(x,x0), x0, A, b, Aeq, beq, lb, ub, @(x)confuneq(x, d, R, t)); 
+    [x, fval] = fmincon(@(x)obj_function(x,x0), x0, A, b, Aeq, beq, lb, ub, @(x)confuneq(x, d, R, t), options); 
     % fprintf('x = %f fval = %f\n', x, fval);
     
     %% compute the error 
@@ -69,8 +70,8 @@ function err = compute_golden_error_instance(obs, cam, R, t)
     yj = x(4)*cam.fy + cam.cy; 
     err = (obs.pi.x - xi)^2 + (obs.pi.y - yi)^2 + (obs.pj.x - xj)^2 + (obs.pj.y - yj)^2;
     
-    fprintf('pixel: pi (%f, %f), pi_n (%f, %f) estimate (%f, %f), \n pj (%f, %f), pj_n (%f, %f) estimate (%f, %f) err: %f\n', obs.pi.x, obs.pi.y, ...
-      obs.pi_n.x, obs.pi_n.y, xi, yi, obs.pj.x, obs.pj.y, obs.pj_n.x, obs.pj_n.y, xj, yj, err);
+   % fprintf('pixel: pi (%f, %f), pi_n (%f, %f) estimate (%f, %f), \n pj (%f, %f), pj_n (%f, %f) estimate (%f, %f) err: %f\n', obs.pi.x, obs.pi.y, ...
+   %   obs.pi_n.x, obs.pi_n.y, xi, yi, obs.pj.x, obs.pj.y, obs.pj_n.x, obs.pj_n.y, xj, yj, err);
     
     %% find the smallest 
 %     err = 1000;

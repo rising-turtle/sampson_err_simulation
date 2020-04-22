@@ -3,7 +3,7 @@
 %
 %
 
-function monte_carlo_test(N, noise_sigma)
+function [mt_mean, mt_std] = monte_carlo_test(N, noise_sigma)
 
 if nargin <= 0 
     N = 10; 
@@ -20,7 +20,9 @@ cam = get_struct_core();
 obs_i = createObservations(feats, cam, R, t); 
 
 %%
-err_array = [];
+gold_ea = [];
+tran_ea = [];
+samp_ea = []; 
 
 %% random 
 for k =0:N
@@ -49,13 +51,18 @@ for k =0:N
     obs = add_noise(obs, noise_sigma); 
     
     %% compute error 
-    [me, ] = compute_golden_error(obs, cam, R, t); 
-    err_array = [me; err_array]; 
+    [g_me, ] = compute_golden_error(obs, cam, R, t);
+    [t_me, ] = compute_transfer_error(obs, cam, R, t);
+    [s_me, ] = compute_sampson_error(obs, cam, R, t);
+    gold_ea = [g_me; gold_ea]; 
+    tran_ea = [t_me; tran_ea]; 
+    samp_ea = [s_me; samp_ea]; 
     
 end
 
-fprintf('final_compute_golden_error: num: %d mean: %f std: %f', size(err_array,1), mean(err_array), std(err_array));
-
+% fprintf('final_compute_golden_error: num: %d mean: %f std: %f', size(err_array,1), mean(err_array), std(err_array));
+mt_mean = [mean(gold_ea), mean(tran_ea), mean(samp_ea)]'; 
+mt_std = [std(gold_ea), std(tran_ea), std(samp_ea)]';
 
 end
 
