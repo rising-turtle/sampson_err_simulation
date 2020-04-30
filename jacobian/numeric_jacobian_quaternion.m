@@ -18,7 +18,7 @@ R = q2R(q);
 de = 1e-6; 
 y = f(q);
 n = 3;
-dy_dtheta = zeros(size(y,1), 3); 
+dy_dtheta = zeros(size(), 3); 
 
 for i = 1:3
     z = zeros(n,1); 
@@ -44,17 +44,7 @@ end
 
 end
 
-%% update quaternion q = [q, b, c, d] = [qw, qx, qy, qz]
-function q = delta_q(theta)
-    
-    q = zeros(4,1); 
-    half_theta = theta./2; 
-    q(1) = 1.; 
-    q(2) = half_theta(1); 
-    q(3) = half_theta(2); 
-    q(4) = half_theta(3); 
 
-end
 
 
 
