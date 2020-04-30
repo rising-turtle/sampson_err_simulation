@@ -16,11 +16,11 @@ end
 
 R = q2R(q); 
 de = 1e-6; 
-
+y = f(q);
 n = 3;
-dy_dtheta = zeros(3, 3); 
+dy_dtheta = zeros(size(y,1), 3); 
 
-for i = 1:size(x,1)
+for i = 1:3
     z = zeros(n,1); 
     z(i) = de; 
     dq = delta_q(z);

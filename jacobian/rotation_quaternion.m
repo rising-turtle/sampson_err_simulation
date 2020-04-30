@@ -2,9 +2,8 @@
 %      April 29, 2020, He Zhang, hzhang8@vcu.edu
 %       test rotation jacobian w.r.t quaternion  y = ARx, 
 %           R is rotation matrix, q is R's quaternion 
-%               (dy_dq)_i = g'*dFi_dx + Fi.*dg_dx, 
-%                   where (dy_dx)_i is the ith row of matrix dy_dx
-%                   Fi is the ith row of F(x). 
+%               y = Rp => dy_dtheta = -R*skew(p) 
+%               y = R'p => dy_dtheta = skew(R'p)
 %
 
 
@@ -14,35 +13,29 @@ function [dy_dx] = rotation_quaternion()
     x = x*pi/180; 
     
     [R, dR] = e2R(x); 
+    q = R2q(R); 
+    p = [2, 0, 0]'; 
+    % f = @(x) q2R(x)*p; 
+    % f = @(x) q2R(x)'*p; 
+    
+    A = [0 1 -0.1; 
+        -1 0 0.2];
+    
+    f = @(x) A*q2R(x)*p;
     
     fprintf('dy_dx_num: \n');
-    [dy_dx_num] = numeric_jacobian(@Ax, x)
+    [dy_dq_num] = numeric_jacobian_quaternion(f, q)
     
-    y = Ax(x); 
+    %% analytical jacobian
+    dy_dq = zeros(3, 3);
     
-    m = size(y,1); 
-    n = size(x,1); 
+    % Sp = -skew_symmetric33(p);
+    % dy_dq = R*Sp; 
+    % pp = R' * p;
+    % dy_dq = skew_symmetric33(pp);
     
-    dg_dx = 2*x; 
-    g = gx(x);
-    dy_dx = zeros(m, n); 
-    for i=1:m
-        dy_dx(i,:) = g'*dR(n*(i-1)+1:n*(i-1)+n, :) + R(i,:).*dg_dx';
-    end
+    dy_dq = -A*R*skew_symmetric33(p);
     
     fprintf('dy_dx: \n'); 
-    dy_dx
-end
-
-function x = gx(x)
-    x = x.^2; 
-end
-
-function y = Ax(x)
-
-    A = e2R(x); 
-    x = gx(x); 
-    
-    y = A*x; 
-
+    dy_dq
 end
