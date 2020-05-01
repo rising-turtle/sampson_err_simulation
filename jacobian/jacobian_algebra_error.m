@@ -52,8 +52,3 @@ de_dpose_j = ext_m * de_dpj * [dpj_dtj dpj_dtheta_j];
 
 end
 
-function H = skew(x)
-    H = [0 -x(3) x(2);
-         x(3) 0 -x(1);
-         -x(2) x(1) 0];
-end
