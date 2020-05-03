@@ -2,10 +2,11 @@
 %   May 1, 2020, He Zhang, hzhang8@vcu.edu 
 %   compute jacobian of the sampson error for 2d case 
 %       se = ptj'*E*pti/sqrt(a^2 + b^2 + c^2 + d^2)
+%       sse = J'*se, where J = [c, d, a, b]
 %       a = (E*pti)_1, b = (E*pti)_2, c = (E'*ptj)_1, d = (E'*ptj)_2
 %                           
 
-function [dse_dpi, dse_dpj] = jacobian_sampson_error_2d(pose_i, pose_j, pti, ptj)
+function [dsse_dpi, dsse_dpj] = jacobian_sampson_error_2d(pose_i, pose_j, pti, ptj)
 
 if nargin <= 0
     clc;
@@ -51,7 +52,8 @@ end
     
     %% se = Ue/Le 
     Ue = nptj'*E*npti;
-    Le = sqrt(a^2 + b^2 + c^2 + d^2); 
+    % Le = sqrt(a^2 + b^2 + c^2 + d^2); 
+    Le = (a^2 + b^2 + c^2 + d^2); 
     
     %% dse_dUe
     dse_dpi = zeros(1,6); 
@@ -69,22 +71,37 @@ end
     db_dpose_i = pti(1)*dE_dpose_i(4,:) + pti(2)*dE_dpose_i(5,:) + dE_dpose_i(6,:);
     dc_dpose_i = ptj(1)*dE_dpose_i(1,:) + ptj(2)*dE_dpose_i(4,:) + dE_dpose_i(7,:);
     dd_dpose_i = ptj(1)*dE_dpose_i(2,:) + ptj(2)*dE_dpose_i(5,:) + dE_dpose_i(8,:);
-    dle_dpose_i = -(a*da_dpose_i + b*db_dpose_i + c*dc_dpose_i + d*dd_dpose_i)/(Le^3);
+    dle_dpose_i = -2*(a*da_dpose_i + b*db_dpose_i + c*dc_dpose_i + d*dd_dpose_i)/(Le^2);
     dse_dpi = dse_dpi + Ue*dle_dpose_i;
-    fprintf('dse_dpi: \n')
-    dse_dpi
+    % fprintf('dse_dpi: \n')
+    % dse_dpi
     
     da_dpose_j = pti(1)*dE_dpose_j(1,:) + pti(2)*dE_dpose_j(2,:) + dE_dpose_j(3,:);
     db_dpose_j = pti(1)*dE_dpose_j(4,:) + pti(2)*dE_dpose_j(5,:) + dE_dpose_j(6,:);
     dc_dpose_j = ptj(1)*dE_dpose_j(1,:) + ptj(2)*dE_dpose_j(4,:) + dE_dpose_j(7,:);
     dd_dpose_j = ptj(1)*dE_dpose_j(2,:) + ptj(2)*dE_dpose_j(5,:) + dE_dpose_j(8,:);
-    dle_dpose_j = -(a*da_dpose_j + b*db_dpose_j + c*dc_dpose_j + d*dd_dpose_j)/(Le^3);
+    dle_dpose_j = -2*(a*da_dpose_j + b*db_dpose_j + c*dc_dpose_j + d*dd_dpose_j)/(Le^2);
     dse_dpj = dse_dpj + Ue*dle_dpose_j;
-    fprintf('dse_dpj: \n')
-    dse_dpj
+    % fprintf('dse_dpj: \n')
+    % dse_dpj
+    
+    %% J 
+    Jt = [c d a b]';
+    se = Ue/Le; 
+    dsse_dpi = zeros(4, 6);
+    dsse_dpj = zeros(4, 6); 
+    dsse_dpi = se*[dc_dpose_i; dd_dpose_i; da_dpose_i; db_dpose_i];
+    dsse_dpj = se*[dc_dpose_j; dd_dpose_j; da_dpose_j; db_dpose_j];
+    
+    dsse_dpi = dsse_dpi + [c*dse_dpi; d*dse_dpi; a*dse_dpi; b*dse_dpi]; 
+    dsse_dpj = dsse_dpj + [c*dse_dpj; d*dse_dpj; a*dse_dpj; b*dse_dpj]; 
+    
+    dsse_dpi
+    dsse_dpj
+    
 end
 
-function se = sampson_error_2d(pose_i, pose_j, pti, ptj)
+function sse = sampson_error_2d(pose_i, pose_j, pti, ptj)
     
     %% Essential matrix 
     ti = pose_i(1:3); 
@@ -108,10 +125,14 @@ function se = sampson_error_2d(pose_i, pose_j, pti, ptj)
     lj = E'*nptj;
     a = li(1); b = li(2); c = lj(1); d = lj(2);
     
+    J = [c d a b]; 
+    
     %% se = Ue/Le 
     Ue = nptj'*E*npti;
-    Le = sqrt(a^2 + b^2 + c^2 + d^2); 
+    % Le = sqrt(a^2 + b^2 + c^2 + d^2); 
+    Le = a^2 + b^2 + c^2 + d^2;
     se = Ue/Le; 
+    sse = J'*se;
 end
 
 
