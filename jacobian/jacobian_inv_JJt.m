@@ -44,8 +44,18 @@ end
         dy_dx_m = -iJJt * dF_dxc * iJJt; 
         dJ_dpj(:,c) = reshape(dy_dx_m', [], 1); 
     end
-  % fprintf('dJ_dpj: \n');
-  % dJ_dpj
+    fprintf('dJ_dpj: \n');
+    dJ_dpj
+    
+    %% test one matrix computation
+    f11 = iJJt(1,1); f12 = iJJt(1,2); f21 = iJJt(2,1); f22 = iJJt(2,2); 
+    F = -[f11^2,   f11*f21, f11*f12, f12*f21; 
+         f11*f12, f11*f22, f12^2,   f12*f22; 
+         f11*f21, f21^2,   f11*f22, f21*f22; 
+         f12*f21, f21*f22, f12*f22, f22^2]; 
+     dJ_dpj2 = F * dJJt_dpose_j; 
+     fprintf('dJ_dpj2: \n'); 
+     dJ_dpj2
     
 end
 
