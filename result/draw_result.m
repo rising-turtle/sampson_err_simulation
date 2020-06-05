@@ -6,11 +6,11 @@ re = f(end:-1:1,2);
 te = f(end:-1:1,3);
 se = f(end:-1:1,4); 
 
-plot(s(1:13), re(1:13), 'k:');
+plot(s(1:12), re(1:12), 'k:');
 hold on;
-plot(s(1:13), te(1:13), 'r-');
+plot(s(1:12), te(1:12), 'r-');
 hold on;
-plot(s(1:13), se(1:13), 'g--');
+plot(s(1:12), se(1:12), 'g--');
 xlabel('sigma (pixels)');
 ylabel('error (pixels)'); 
-legend('reprojection error', 'transfer error', 'Sampson error');
+legend('Reprojection Error', 'Transfer distance', 'Sampson distance');
