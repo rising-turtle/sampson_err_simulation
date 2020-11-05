@@ -42,13 +42,10 @@ function err = compute_sampson_error_instance(obs, cam, R, t)
     x1 = x + dx;
     % x2 = x - dx; 
     
-    %% find out which one is more close 
+    %% 
     x_true = [obs.pi.x obs.pi.y obs.pj.x obs.pj.y]'; 
-    
-    dis1 = distance(cam, x1, x_true); 
-    % dis2 = distance(cam, x2, x_true); 
-    
-    err = dis1; % min(dis1, dis2); 
+    dis1 = distance(cam, x1, x_true);  
+    err = dis1; 
     
 end
 
