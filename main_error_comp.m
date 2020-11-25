@@ -21,13 +21,16 @@ end
 % fmean = fopen('result/mean_err_gold_trans_samp.log', 'w'); 
 % fstd = fopen('result/std_err_gold_trans_samp.log', 'w'); 
 
-fmean = fopen('result/geometric_dis_mean_err_gold_trans_samp.log', 'w'); 
-fstd = fopen('result/geometric_dis_std_err_gold_trans_samp.log', 'w'); 
+% fmean = fopen('result/geometric_dis_mean_err_gold_trans_samp.log', 'w'); 
+% fstd = fopen('result/geometric_dis_std_err_gold_trans_samp.log', 'w'); 
 
-fprintf(fmean, '%3.3f  %7.7f  %7.7f  %7.7f %7.7f \r\n', [noise', y_mean(:,1), y_mean(:,2), y_mean(:,3), y_mean(:,4)]');
-fprintf(fstd, '%3.3f  %7.7f  %7.7f  %7.7f %7.7f \r\n', [noise', y_std(:,1), y_std(:,2), y_std(:,3), y_std(:,4)]');
+fmean = fopen('result/sampson_dis_epipolar_vs_perspective.log', 'w'); 
+
+% fprintf(fmean, '%3.3f  %7.7f  %7.7f  %7.7f %7.7f \r\n', [noise', y_mean(:,1), y_mean(:,2), y_mean(:,3), y_mean(:,4)]');
+fprintf(fmean, '%3.3f  %7.7f  %7.7f \r\n', [noise', y_mean(:,1), y_mean(:,2)]');
+% fprintf(fstd, '%3.3f  %7.7f  %7.7f  %7.7f %7.7f \r\n', [noise', y_std(:,1), y_std(:,2), y_std(:,3), y_std(:,4)]');
 
 fclose(fmean); 
-fclose(fstd); 
+% fclose(fstd); 
 
 end
