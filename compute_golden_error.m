@@ -1,22 +1,25 @@
 %%
+% Nov. 25 2020, He Zhang, fuyinzh@gmail.com 
 % use golden standard way to correct the observed features 
-% and compute the error 
+% and compute golden standard distance and the error between ground truth 
 %
 
-function [mean_err, std_err] = compute_golden_error(obs, cam, R, t)
+function [mean_dis, mean_err] = compute_golden_error(obs, cam, R, t)
 
 err_array = [];
+dis_array = []; 
+
 for i=1:size(obs,1)
     obs_ij = obs(i); 
-    err_ij = compute_golden_error_instance(obs_ij, cam, R, t); 
+    [dis_ij, err_ij] = compute_golden_error_instance(obs_ij, cam, R, t); 
+    dis_array = [dis_ij; dis_array]; 
     err_array = [err_ij; err_array]; 
-    
 end
     
-fprintf('compute_golden_error: num: %d mean: %f std: %f\r\n', size(obs,1), mean(err_array), std(err_array));
+fprintf('compute_gold_standard: num: %d mean_dis: %f mean_err: %f\r\n', size(obs,1), mean(dis_array), mean(err_array));
 
+mean_dis = mean(dis_array); 
 mean_err = mean(err_array);
-std_err = std(err_array);
 
 end
 
@@ -60,7 +63,7 @@ function [c, ceq] = confuneq_geometric_dis(x, d, R, t) % geometric distance
 
 end
 
-function err = compute_golden_error_instance(obs, cam, R, t)
+function [dis, err] = compute_golden_error_instance(obs, cam, R, t)
    
     nxi = (obs.pi_n.x-cam.cx)/cam.fx; 
     nyi = (obs.pi_n.y-cam.cy)/cam.fy; 
@@ -85,11 +88,15 @@ function err = compute_golden_error_instance(obs, cam, R, t)
     
     % fprintf('x = %f fval = %f\n', x, fval);
     
-    %% compute the error 
+    %% compute distance and error 
     xi = x(1)*cam.fx + cam.cx; 
     yi = x(2)*cam.fy + cam.cy; 
     xj = x(3)*cam.fx + cam.cx; 
-    yj = x(4)*cam.fy + cam.cy; 
+    yj = x(4)*cam.fy + cam.cy;
+    
+    % distance |hat(X) - meas(X)|^2 
+    dis = (obs.pi_n.x - xi)^2 + (obs.pi_n.y - yi)^2 + (obs.pj_n.x - xj)^2 + (obs.pj_n.y - yj)^2;
+    % err |hat(X) - true(X)|^2
     err = (obs.pi.x - xi)^2 + (obs.pi.y - yi)^2 + (obs.pj.x - xj)^2 + (obs.pj.y - yj)^2;
     
    % fprintf('pixel: pi (%f, %f), pi_n (%f, %f) estimate (%f, %f), \n pj (%f, %f), pj_n (%f, %f) estimate (%f, %f) err: %f\n', obs.pi.x, obs.pi.y, ...

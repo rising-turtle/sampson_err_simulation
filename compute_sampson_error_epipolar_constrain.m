@@ -3,24 +3,26 @@
 % compute the sampson error based on the epipolar constraint
 %
 
-function [mean_err, std_err] = compute_sampson_error_epipolar_constrain(obs, cam, R, t)
+function [mean_dis, mean_err] = compute_sampson_error_epipolar_constrain(obs, cam, R, t)
 
 err_array = [];
+dis_array = []; 
+
 for i=1:size(obs,1)
     obs_ij = obs(i); 
-    err_ij = compute_sampson_error_epipolar_instance(obs_ij, cam, R, t); 
+    [dis_ij, err_ij] = compute_sampson_error_epipolar_instance(obs_ij, cam, R, t); 
+    dis_array = [dis_ij; dis_array]; 
     err_array = [err_ij; err_array]; 
-    
 end
     
-fprintf('compute_sampson_epipolar_error: num: %d mean: %f std: %f\r\n', size(obs,1), mean(err_array), std(err_array));
+fprintf('compute_sampson_epipolar: num: %d mean_dis: %f mean_err: %f\r\n', size(obs,1), mean(dis_array), mean(err_array));
 
+mean_dis = mean(dis_array); 
 mean_err = mean(err_array);
-std_err = std(err_array);
 
 end
 
-function err = compute_sampson_error_epipolar_instance(obs, cam, R, t)
+function [dis, err] = compute_sampson_error_epipolar_instance(obs, cam, R, t)
     
     tji = -R' * t; 
     E = R * skew(tji); 
@@ -41,10 +43,15 @@ function err = compute_sampson_error_epipolar_instance(obs, cam, R, t)
     de = Xj'*E*Xi; 
     dx = -J'*de/J2; 
     x1 = x + dx; 
+    
+    %% compute distance and error
+    % distance |hat(X) - meas(X)|^2 
+    x_meas = [obs.pi_n.x obs.pi_n.y obs.pj_n.x obs.pj_n.y]';
+    dis = distance(cam, x1, x_meas); 
+    
+    % err |hat(X) - true(X)|^2 
     x_true = [obs.pi.x obs.pi.y obs.pj.x obs.pj.y]'; 
-    dis1 = distance(cam, x1, x_true);  
-    err = dis1; 
-
+    err = distance(cam, x1, x_true);  
        
 end
 
