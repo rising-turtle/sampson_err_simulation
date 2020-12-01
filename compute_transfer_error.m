@@ -27,7 +27,8 @@ function [dis, err] = compute_transfer_error_instance(obs, cam, R, t)
     nyi = (obs.pi_n.y-cam.cy)/cam.fy; 
     % nxj = (obs.pj_n.x-cam.cx)/cam.fx; 
     % nyj = (obs.pj_n.y-cam.cy)/cam.fy; 
-    d = obs.di; 
+    % d = obs.di; 
+    d = obs.di_n;
     
     pti = [nxi*d nyi*d d]'; 
     ptj = R*pti + t;

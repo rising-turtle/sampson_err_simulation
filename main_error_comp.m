@@ -4,6 +4,7 @@
 function main_error_comp()
 
 N = 500; 
+% N = 5; 
 noise = 0.2:0.2:2.4;
 % noise = 0.2:0.8:2.;
 y_mean_dis = []; 
@@ -26,8 +27,8 @@ end
 % fstd = fopen('result/geometric_dis_std_err_gold_trans_samp.log', 'w'); 
 
 % fmean = fopen('result/sampson_dis_epipolar_vs_perspective.log', 'w'); 
-fmean_dis = fopen('result/mean_distance_comparison.log', 'w'); 
-fmean_err = fopen('result/mean_error_comparison.log', 'w'); 
+fmean_dis = fopen('result/mean_residual_error_comparison.log', 'w'); 
+fmean_err = fopen('result/mean_estimation_error_comparison.log', 'w'); 
 
 fprintf(fmean_dis, '%3.3f  %7.7f  %7.7f  %7.7f %7.7f \r\n', [noise', y_mean_dis(:,1), y_mean_dis(:,2), y_mean_dis(:,3), y_mean_dis(:,4)]');
 fprintf(fmean_err, '%3.3f  %7.7f  %7.7f  %7.7f %7.7f \r\n', [noise', y_mean_err(:,1), y_mean_err(:,2), y_mean_err(:,3), y_mean_err(:,4)]');

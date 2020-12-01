@@ -71,8 +71,9 @@ function [dis, err] = compute_golden_error_instance(obs, cam, R, t)
     nyj = (obs.pj_n.y-cam.cy)/cam.fy; 
     
     x0 = [nxi nyi nxj nyj]'; 
-    d = obs.di; 
-  
+    % d = obs.di; 
+    d = obs.di_n; 
+    
     %% constraints 
     A = []; 
     b = []; 

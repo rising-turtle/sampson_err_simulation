@@ -17,6 +17,7 @@ feats = createFeatures(10, 10, 10);
 %% create observations for the first camera pose 
 R = [1 0 0; 0 1 0; 0 0 1]; 
 t = [0 0 0]'; 
+Pose0 = [R, t]; 
 cam = get_struct_core(); 
 obs_i = createObservations(feats, cam, R, t); 
 
@@ -40,6 +41,7 @@ for k =0:N
     euler_angle = rr(1:3)*pi/180;
     R = e2R(euler_angle);
     t = rr(4:6); 
+    Pose1 = [R, t];
     %% find observations 
     obs_j = createObservations(feats, cam, R, t);
     
@@ -52,6 +54,12 @@ for k =0:N
     
     %% add noise 
     obs = add_noise(obs, noise_sigma); 
+    
+    %% add normalized feature measurement 
+    obs = normalize_feature_measure(obs, cam); 
+    
+    %% add triangulated depth 
+    obs = triangulate_depth(Pose0, Pose1, obs); 
     
     %% compute error 
     [re_dis, re_err] = compute_golden_error(obs, cam, R, t);
