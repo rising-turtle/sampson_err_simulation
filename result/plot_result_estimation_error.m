@@ -4,7 +4,8 @@
 % true value 
 % f = load('mean_err_gold_trans_samp.log'); 
 % f = load('geometric_dis_mean_err_gold_trans_samp.log'); 
-f = load('mean_error_comparison.log'); 
+% f = load('mean_error_comparison.log');
+f = load('mean_estimation_error_comparison.log');
 s = f(:,1);
 re = f(:,2);
 te = f(:,3);
@@ -19,8 +20,9 @@ plot(s(1:12), te(1:12), 'r-');
 hold on;
 plot(s(1:12), se(1:12), 'g--');
 hold on; 
-plot(s(1:12), se_g(1:12), 'm-.');
+%plot(s(1:12), se_g(1:12), 'm-.');
 xlabel('sigma (pixels)');
 ylabel('mean estimation square error (pixels)'); 
-legend('Reprojection Error', 'Transfer Distance', 'Sampson Distance (perspective projection)', ...
-            'Sampson Distance (epipolar)');
+legend('Reprojection Error', 'Transfer Distance', 'Sampson Distance');
+%legend('Reprojection Error', 'Transfer Distance', 'Sampson Distance (perspective projection)', ...
+%            'Sampson Distance (epipolar)');
