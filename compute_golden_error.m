@@ -52,15 +52,15 @@ function [c, ceq] = confuneq_geometric_dis(x, d, R, t) % geometric distance
     pti = [x(1)*d, x(2)*d, d]'; 
     ptj = R * pti + t; 
     
-    ceq(1) = x(3) - ptj(1)/ptj(3); 
-    ceq(2) = x(4) - ptj(2)/ptj(3); 
+    ceq(1) = 1e5*(x(3) - ptj(1)/ptj(3)); 
+    ceq(2) = 1e5*(x(4) - ptj(2)/ptj(3)); 
     
     % ceq(1) = x(3)*(R(3,1)*x(1)*d + R(3,2)*x(2)*d + R(3,3)*d + t(3))-(R(1,1)*x(1)*d ...
     %    + R(1,2)*x(2)*d + R(1,3)*d + t(1));
     
     % ceq(2) = x(4)*(R(3,1)*x(1)*d + R(3,2)*x(2)*d + R(3,3)*d + t(3))- ... 
     %     (R(2,1)*x(1)*d + R(2,2)*x(2)*d + R(2,3)*d + t(2));
-
+    % norm(ceq)
 end
 
 function [dis, err] = compute_golden_error_instance(obs, cam, R, t)
@@ -82,7 +82,7 @@ function [dis, err] = compute_golden_error_instance(obs, cam, R, t)
     lb = []; 
     ub = [];
     % options = optimset('Display', 'iter');
-    options = optimoptions('fmincon','Display','off');  
+    options = optimoptions('fmincon','Display','off');  % 'iter-detailed'
     % [x, fval] = fmincon(@(x)obj_function(x,x0), x0, A, b, Aeq, beq, lb, ub, @(x)confuneq(x, d, R, t), options); 
     
     [x, fval] = fmincon(@(x)obj_function(x,x0), x0, A, b, Aeq, beq, lb, ub, @(x)confuneq_geometric_dis(x, d, R, t), options); 

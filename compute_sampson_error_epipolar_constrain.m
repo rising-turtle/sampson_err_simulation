@@ -15,7 +15,7 @@ for i=1:size(obs,1)
     err_array = [err_ij; err_array]; 
 end
     
-fprintf('compute_sampson_epipolar: num: %d mean_dis: %f mean_err: %f\r\n', size(obs,1), mean(dis_array), mean(err_array));
+% fprintf('compute_sampson_epipolar: num: %d mean_dis: %f mean_err: %f\r\n', size(obs,1), mean(dis_array), mean(err_array));
 
 mean_dis = mean(dis_array); 
 mean_err = mean(err_array);
