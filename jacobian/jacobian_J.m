@@ -53,8 +53,8 @@ end
     dJ2_dtj = zeros(2,3);
     
     % check using numeric function 
-%    f_pose_i = @(pose_i) A*Rj'*q2R(pose_i(4:7))*[d1 d2];
-%    [dJ_dpose_i_num] = numeric_jacobian_matrix_pose(f_pose_i, pose_i);
+    f_pose_i = @(pose_i) A*Rj'*q2R(pose_i(4:7))*[d1 d2];
+    [dJ_dpose_i_num] = numeric_jacobian_matrix_pose(f_pose_i, pose_i);
     
     % check using numeric function 
 %    f_pose_j = @(pose_j) A*q2R(pose_j(4:7))'*Ri*[d1 d2];
