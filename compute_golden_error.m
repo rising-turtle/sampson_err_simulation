@@ -100,6 +100,8 @@ function [dis, err] = compute_golden_error_instance(obs, cam, R, t)
     % err |hat(X) - true(X)|^2
     err = (obs.pi.x - xi)^2 + (obs.pi.y - yi)^2 + (obs.pj.x - xj)^2 + (obs.pj.y - yj)^2;
     
+    %fprintf('golden_error: projection error before %f after %f\n', projection_error(R,t, x0, d), projection_error(R,t, x, d)); 
+    
    % fprintf('pixel: pi (%f, %f), pi_n (%f, %f) estimate (%f, %f), \n pj (%f, %f), pj_n (%f, %f) estimate (%f, %f) err: %f\n', obs.pi.x, obs.pi.y, ...
    %   obs.pi_n.x, obs.pi_n.y, xi, yi, obs.pj.x, obs.pj.y, obs.pj_n.x, obs.pj_n.y, xj, yj, err);
     

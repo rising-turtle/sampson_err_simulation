@@ -54,6 +54,10 @@ function [dis, err] = compute_sampson_error_instance(obs, cam, R, t)
     x_true = [obs.pi.x obs.pi.y obs.pj.x obs.pj.y]'; 
     err = distance(cam, x1, x_true);  
     
+    
+  %  fprintf('sampson_error: projection error before %f after %f\n', projection_error(R,t, x, d), projection_error(R,t, x1, d)); 
+    
+    
 end
 
 function dis = distance(cam, x, xt)
