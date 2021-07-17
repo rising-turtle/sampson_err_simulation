@@ -49,6 +49,8 @@ for k =0:N
         continue; 
     end
     
+    NUM_FEATS = size(obs,1)*1.; 
+    
     %% add noise 
     obs = add_noise(obs, noise_sigma); 
     
@@ -62,16 +64,16 @@ for k =0:N
     tic; 
     compute_golden_error(obs, cam, R, t);
     time_gold = toc; 
-    gold_ea = [gold_ea; time_gold]; 
+    gold_ea = [gold_ea; time_gold/NUM_FEATS]; 
     tic; 
     compute_transfer_error(obs, cam, R, t);
     time_tran = toc; 
-    tran_ea = [tran_ea; time_tran]; 
+    tran_ea = [tran_ea; time_tran/NUM_FEATS]; 
     tic; 
     compute_sampson_error(obs, cam, R, t);
     time_sa = toc;
-    samp_ea  = [time_sa; samp_ea]; 
-    fprintf('monte_carlo_test_time: num: %d mean time cost: gold %f transfer: %f sampson: %f \r\n', k, time_gold, time_tran, time_sa);
+    samp_ea  = [time_sa; samp_ea/NUM_FEATS]; 
+    fprintf('monte_carlo_test_time: num: %d mean time cost: gold %f transfer: %f sampson: %f \r\n', k, time_gold/NUM_FEATS, time_tran/NUM_FEATS, time_sa/NUM_FEATS);
 end
 
 % fprintf('final_compute_golden_error: num: %d mean: %f std: %f', size(err_array,1), mean(err_array), std(err_array));

@@ -3,7 +3,7 @@
 %
 function main_time_comp()
 
-N = 50; 
+N = 500; 
 noise = 1:1:2; % 0.2:0.2:5;
 y_mean = []; 
 y_std = [];
